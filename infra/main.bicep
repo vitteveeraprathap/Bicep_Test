@@ -83,11 +83,13 @@ module containerMod 'modules/storageContainer.bicep' = if (deployContainer) {
   scope: resourceGroup(rgName)
   dependsOn: [
     rgModule
+    storageMod
   ]
   params: {
     storageAccountName: storageName
     containerName: containerName
   }
 }
+
 
 output resourceGroupName string = rgName
