@@ -1,4 +1,3 @@
-// infra/main.bicep
 targetScope = 'subscription'
 
 // infra/main.bicep
@@ -42,11 +41,14 @@ module rgModule 'modules/resourceGroup.bicep' = {
 
 // ------------------------------------------------------------------
 // Deploy Storage into the created RG (resourceGroup scope)
-// Note: use the compile-time parameter 'rgName' for scope calculation.
+// Add dependsOn to ensure RG exists first
 // ------------------------------------------------------------------
 module storageMod 'modules/storage.bicep' = if (deployStorage) {
   name: 'storageDeployment'
   scope: resourceGroup(rgName)
+  dependsOn: [
+    rgModule
+  ]
   params: {
     storageName: storageName
     skuName: storageSku
@@ -61,6 +63,9 @@ module storageMod 'modules/storage.bicep' = if (deployStorage) {
 module kvMod 'modules/keyvault.bicep' = if (deployKeyVault) {
   name: 'keyvaultDeployment'
   scope: resourceGroup(rgName)
+  dependsOn: [
+    rgModule
+  ]
   params: {
     kvName: keyVaultName
     location: location
@@ -76,6 +81,9 @@ module kvMod 'modules/keyvault.bicep' = if (deployKeyVault) {
 module containerMod 'modules/storageContainer.bicep' = if (deployContainer) {
   name: 'containerDeployment'
   scope: resourceGroup(rgName)
+  dependsOn: [
+    rgModule
+  ]
   params: {
     storageAccountName: storageName
     containerName: containerName
