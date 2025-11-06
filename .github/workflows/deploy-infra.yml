@@ -31,8 +31,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Subscription deployment - ${{ github.event.inputs.environment }}
-
     env:
       BICEP_MAIN: infra/main.bicep
       PARAMS_FILE: infra/parameters/${{ github.event.inputs.environment }}.parameters.json
@@ -94,9 +92,31 @@ jobs:
 
       - name: What-if (preview changes)
         run: |
-          az deployment sub what-if             --location "${{ github.event.inputs.location || 'southeastasia' }}"             --template-file "${{ env.BICEP_MAIN }}"             --parameters @"${{ env.PARAMS_FILE }}"             deployStorage=${{ steps.flags.outputs.deployStorage }}             deployKeyVault=${{ steps.flags.outputs.deployKeyVault }}             deployContainer=${{ steps.flags.outputs.deployContainer }}             --query "properties.changeSummary" --output json
+          LOCATION="${{ github.event.inputs.location }}"
+          if [ -z "$LOCATION" ]; then LOCATION="eastus"; fi
+
+          az deployment sub what-if \
+            --location "$LOCATION" \
+            --template-file "${{ env.BICEP_MAIN }}" \
+            --parameters @"${{ env.PARAMS_FILE }}" \
+            deployStorage=${{ steps.flags.outputs.deployStorage }} \
+            deployKeyVault=${{ steps.flags.outputs.deployKeyVault }} \
+            deployContainer=${{ steps.flags.outputs.deployContainer }} \
+            --query "properties.changeSummary" --output json
 
       - name: Deploy (subscription-level, Incremental)
         run: |
+          LOCATION="${{ github.event.inputs.location }}"
+          if [ -z "$LOCATION" ]; then LOCATION="eastus"; fi
           DEPLOY_NAME="sub-deploy-${{ github.run_id }}"
-          az deployment sub create             --name "$DEPLOY_NAME"             --location "${{ github.event.inputs.location || 'southeastasia' }}"             --template-file "${{ env.BICEP_MAIN }}"             --parameters @"${{ env.PARAMS_FILE }}"             deployStorage=${{ steps.flags.outputs.deployStorage }}             deployKeyVault=${{ steps.flags.outputs.deployKeyVault }}             deployContainer=${{ steps.flags.outputs.deployContainer }}             --mode Incremental             --only-show-errors
+
+          az deployment sub create \
+            --name "$DEPLOY_NAME" \
+            --location "$LOCATION" \
+            --template-file "${{ env.BICEP_MAIN }}" \
+            --parameters @"${{ env.PARAMS_FILE }}" \
+            deployStorage=${{ steps.flags.outputs.deployStorage }} \
+            deployKeyVault=${{ steps.flags.outputs.deployKeyVault }} \
+            deployContainer=${{ steps.flags.outputs.deployContainer }} \
+            --mode Incremental \
+            --only-show-errors
