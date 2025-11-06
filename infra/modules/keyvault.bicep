@@ -1,4 +1,3 @@
-// infra/modules/keyvault.bicep
 param kvName string
 param location string = resourceGroup().location
 param skuName string = 'standard'
