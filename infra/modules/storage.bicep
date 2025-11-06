@@ -1,3 +1,4 @@
+// infra/modules/storage.bicep
 param storageName string
 param skuName string = 'Standard_LRS'
 param kind string = 'StorageV2'
@@ -8,7 +9,11 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   location: location
   sku: { name: skuName }
   kind: kind
-  properties: { allowBlobPublicAccess: false }
+  properties: {
+    allowBlobPublicAccess: false
+    minimumTlsVersion: 'TLS1_2'
+  }
 }
 
 output storageAccountName string = storage.name
+output storageId string = storage.id
