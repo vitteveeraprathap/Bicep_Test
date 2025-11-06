@@ -10,7 +10,10 @@ resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
   location: location
   properties: {
     tenantId: subscription().tenantId
-    sku: { family: 'A', name: skuName }
+    sku: {
+      family: 'A'
+      name: skuName
+    }
     accessPolicies: []
     enableSoftDelete: enableSoftDelete
     enablePurgeProtection: enablePurgeProtection
