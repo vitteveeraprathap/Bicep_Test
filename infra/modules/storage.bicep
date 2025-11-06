@@ -7,7 +7,9 @@ param location string = resourceGroup().location
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageName
   location: location
-  sku: { name: skuName }
+  sku: {
+    name: skuName
+  }
   kind: kind
   properties: {
     allowBlobPublicAccess: false
