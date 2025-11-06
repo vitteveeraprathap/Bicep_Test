@@ -1,3 +1,4 @@
+// infra/modules/keyvault.bicep
 param kvName string
 param location string = resourceGroup().location
 param skuName string = 'standard'
@@ -17,3 +18,4 @@ resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
 }
 
 output keyVaultName string = kv.name
+output keyVaultId string = kv.id
