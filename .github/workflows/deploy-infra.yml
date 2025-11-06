@@ -104,7 +104,7 @@ jobs:
             deployContainer=${{ steps.flags.outputs.deployContainer }} \
             --query "properties.changeSummary" --output json
 
-      - name: Deploy (subscription-level, Incremental)
+      - name: Deploy (subscription-level)
         run: |
           LOCATION="${{ github.event.inputs.location }}"
           if [ -z "$LOCATION" ]; then LOCATION="southeastasia"; fi
