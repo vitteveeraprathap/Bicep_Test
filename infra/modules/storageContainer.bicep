@@ -1,4 +1,3 @@
-// infra/modules/storageContainer.bicep
 param storageAccountName string
 param containerName string
 
