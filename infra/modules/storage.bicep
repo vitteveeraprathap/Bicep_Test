@@ -1,4 +1,3 @@
-// infra/modules/storage.bicep
 param storageName string
 param skuName string = 'Standard_LRS'
 param kind string = 'StorageV2'
