@@ -1,4 +1,3 @@
-// infra/modules/resourceGroup.bicep
 targetScope = 'subscription'
 
 param rgName string
