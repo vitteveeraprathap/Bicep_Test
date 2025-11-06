@@ -93,7 +93,7 @@ jobs:
       - name: What-if (preview changes)
         run: |
           LOCATION="${{ github.event.inputs.location }}"
-          if [ -z "$LOCATION" ]; then LOCATION="eastus"; fi
+          if [ -z "$LOCATION" ]; then LOCATION="southeastasia"; fi
 
           az deployment sub what-if \
             --location "$LOCATION" \
@@ -107,7 +107,7 @@ jobs:
       - name: Deploy (subscription-level, Incremental)
         run: |
           LOCATION="${{ github.event.inputs.location }}"
-          if [ -z "$LOCATION" ]; then LOCATION="eastus"; fi
+          if [ -z "$LOCATION" ]; then LOCATION="southeastasia"; fi
           DEPLOY_NAME="sub-deploy-${{ github.run_id }}"
 
           az deployment sub create \
