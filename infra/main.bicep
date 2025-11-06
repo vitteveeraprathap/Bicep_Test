@@ -17,7 +17,7 @@ param storageKind string = 'StorageV2'
 
 // keyvault params
 param keyVaultName string = ''
-@allowed([ 'standard' 'premium' ])
+@allowed([ 'standard', 'premium' ])
 param keyVaultSkuName string = 'standard'
 param enableSoftDelete bool = true
 param enablePurgeProtection bool = false
