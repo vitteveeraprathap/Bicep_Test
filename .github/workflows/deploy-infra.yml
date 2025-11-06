@@ -118,5 +118,4 @@ jobs:
             deployStorage=${{ steps.flags.outputs.deployStorage }} \
             deployKeyVault=${{ steps.flags.outputs.deployKeyVault }} \
             deployContainer=${{ steps.flags.outputs.deployContainer }} \
-            --mode Incremental \
             --only-show-errors
