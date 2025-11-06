@@ -39,10 +39,11 @@ module rgModule 'modules/resourceGroup.bicep' = {
 
 // ------------------------------------------------------------------
 // Deploy Storage into the created RG (resourceGroup scope)
+// Note: use the compile-time parameter 'rgName' for scope calculation.
 // ------------------------------------------------------------------
 module storageMod 'modules/storage.bicep' = if (deployStorage) {
   name: 'storageDeployment'
-  scope: resourceGroup(rgModule.outputs.name)
+  scope: resourceGroup(rgName)
   params: {
     storageName: storageName
     skuName: storageSku
@@ -56,7 +57,7 @@ module storageMod 'modules/storage.bicep' = if (deployStorage) {
 // ------------------------------------------------------------------
 module kvMod 'modules/keyvault.bicep' = if (deployKeyVault) {
   name: 'keyvaultDeployment'
-  scope: resourceGroup(rgModule.outputs.name)
+  scope: resourceGroup(rgName)
   params: {
     kvName: keyVaultName
     location: location
@@ -71,11 +72,11 @@ module kvMod 'modules/keyvault.bicep' = if (deployKeyVault) {
 // ------------------------------------------------------------------
 module containerMod 'modules/storageContainer.bicep' = if (deployContainer) {
   name: 'containerDeployment'
-  scope: resourceGroup(rgModule.outputs.name)
+  scope: resourceGroup(rgName)
   params: {
     storageAccountName: storageName
     containerName: containerName
   }
 }
 
-output resourceGroupName string = rgModule.outputs.name
+output resourceGroupName string = rgName
