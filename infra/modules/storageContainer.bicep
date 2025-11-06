@@ -1,9 +1,25 @@
+// infra/modules/storageContainer.bicep
 param storageAccountName string
 param containerName string
 
-resource st 'Microsoft.Storage/storageAccounts@2023-01-01' existing = { name: storageAccountName }
-resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
-  name: 'default/${containerName}'
-  parent: st
-  properties: { publicAccess: 'None' }
+// existing storage account in same resource group
+resource st 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
+  name: storageAccountName
 }
+
+// reference the blob service (name 'default') as existing child of the storage account
+resource blobSvc 'Microsoft.Storage/storageAccounts/blobServices@2021-09-01' existing = {
+  parent: st
+  name: 'default'
+}
+
+// create the container as a child of the blob service (no slashes in name)
+resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
+  parent: blobSvc
+  name: containerName
+  properties: {
+    publicAccess: 'None'
+  }
+}
+
+output containerNameOut string = container.name
