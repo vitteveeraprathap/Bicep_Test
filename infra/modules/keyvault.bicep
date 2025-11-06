@@ -15,7 +15,9 @@ resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
     }
     accessPolicies: []
     enableSoftDelete: enableSoftDelete
-    enablePurgeProtection: enablePurgeProtection
+    // Only set purge protection to true; do not try to disable it later
+    // This avoids "cannot be set to false" error
+    enablePurgeProtection: enablePurgeProtection ? true : null
   }
 }
 
