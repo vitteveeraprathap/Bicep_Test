@@ -1,30 +1,48 @@
+// infra/main.bicep
+@description('Deployment location for the resource group')
 param location string = 'southeastasia'
+
+@description('Resource group name (will be created via subscription-scoped module)')
 param rgName string
 
+// control flags
 param deployStorage bool = true
 param deployKeyVault bool = true
 param deployContainer bool = true
 
+// storage params
 param storageName string = ''
 param storageSku string = 'Standard_LRS'
 param storageKind string = 'StorageV2'
 
+// keyvault params
 param keyVaultName string = ''
+@allowed([ 'standard' 'premium' ])
 param keyVaultSkuName string = 'standard'
 param enableSoftDelete bool = true
 param enablePurgeProtection bool = false
 
+// container params
 param containerName string = ''
 
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: rgName
-  location: location
-  tags: { environment: 'managed' }
+// ------------------------------------------------------------------
+// Create resource group using a subscription-scoped module
+// ------------------------------------------------------------------
+module rgModule 'modules/resourceGroup.bicep' = {
+  name: 'createRg'
+  scope: subscription()
+  params: {
+    rgName: rgName
+    location: location
+  }
 }
 
+// ------------------------------------------------------------------
+// Deploy Storage into the created RG (resourceGroup scope)
+// ------------------------------------------------------------------
 module storageMod 'modules/storage.bicep' = if (deployStorage) {
   name: 'storageDeployment'
-  scope: resourceGroup(rg.name)
+  scope: resourceGroup(rgModule.outputs.name)
   params: {
     storageName: storageName
     skuName: storageSku
@@ -33,9 +51,12 @@ module storageMod 'modules/storage.bicep' = if (deployStorage) {
   }
 }
 
+// ------------------------------------------------------------------
+// Deploy Key Vault into the created RG (resourceGroup scope)
+// ------------------------------------------------------------------
 module kvMod 'modules/keyvault.bicep' = if (deployKeyVault) {
   name: 'keyvaultDeployment'
-  scope: resourceGroup(rg.name)
+  scope: resourceGroup(rgModule.outputs.name)
   params: {
     kvName: keyVaultName
     location: location
@@ -45,13 +66,16 @@ module kvMod 'modules/keyvault.bicep' = if (deployKeyVault) {
   }
 }
 
+// ------------------------------------------------------------------
+// Create blob container in storage account (resourceGroup scope)
+// ------------------------------------------------------------------
 module containerMod 'modules/storageContainer.bicep' = if (deployContainer) {
   name: 'containerDeployment'
-  scope: resourceGroup(rg.name)
+  scope: resourceGroup(rgModule.outputs.name)
   params: {
     storageAccountName: storageName
     containerName: containerName
   }
 }
 
-output resourceGroupName string = rg.name
+output resourceGroupName string = rgModule.outputs.name
