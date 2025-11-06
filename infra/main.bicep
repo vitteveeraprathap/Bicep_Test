@@ -1,4 +1,7 @@
 // infra/main.bicep
+targetScope = 'subscription'
+
+// infra/main.bicep
 @description('Deployment location for the resource group')
 param location string = 'southeastasia'
 
