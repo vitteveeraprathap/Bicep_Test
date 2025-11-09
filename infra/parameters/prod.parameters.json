@@ -10,7 +10,7 @@
     "storageName": { "value": "mystorageacctprd001" },
     "storageSku": { "value": "Standard_LRS" },
     "storageKind": { "value": "StorageV2" },
-    "keyVaultName": { "value": "kve-meap-prod" },
+    "keyVaultName": { "value": "kvee-meap-prod" },
     "keyVaultSkuName": { "value": "standard" },
     "enableSoftDelete": { "value": true },
     "enablePurgeProtection": { "value": false },
