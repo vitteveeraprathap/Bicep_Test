@@ -7,7 +7,7 @@
     "deployStorage": { "value": true },
     "deployKeyVault": { "value": true },
     "deployContainer": { "value": true },
-    "storageName": { "value": "mystorageacctprd001" },
+    "storageName": { "value": "mystoaeactprod01" },
     "storageSku": { "value": "Standard_LRS" },
     "storageKind": { "value": "StorageV2" },
     "keyVaultName": { "value": "kvee-meap-prod" },
