@@ -10,7 +10,7 @@
     "storageName": { "value": "mystoraeactdev01" },
     "storageSku": { "value": "Standard_LRS" },
     "storageKind": { "value": "StorageV2" },
-    "keyVaultName": { "value": "kve-meap-dev" },
+    "keyVaultName": { "value": "kvee-meap-dev" },
     "keyVaultSkuName": { "value": "standard" },
     "enableSoftDelete": { "value": true },
     "enablePurgeProtection": { "value": false },
